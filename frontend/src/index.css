@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+#root{
+  font-family: M Plus Rounded 1c, sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+}
+.no-scrollbar::-webkit-scrollbar{
+  display: none;
+}
+.no-scrollbar{
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0%);
+  }
+}
+
+.animate-slide-in {
+  animation: slide-in 0.3s ease-out forwards;
+}

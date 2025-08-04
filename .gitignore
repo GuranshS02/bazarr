@@ -1,0 +1,39 @@
+# ========== NODE ========== #
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ========== ENVIRONMENT FILES ========== #
+.env
+.env.*.local
+
+# ========== LOG FILES ========== #
+*.log
+
+# ========== BUILD OUTPUT ========== #
+dist/
+build/
+.vite/
+
+# ========== SYSTEM FILES ========== #
+.DS_Store
+Thumbs.db
+
+# ========== IDE/EDITOR CONFIGS ========== #
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# ========== MAC FILES ========== #
+*.DS_Store
+
+# ========== TEST COVERAGE ========== #
+coverage/
+
+# ========== BABEL/ESLINT ========== #
+.cache/
+eslintcache
