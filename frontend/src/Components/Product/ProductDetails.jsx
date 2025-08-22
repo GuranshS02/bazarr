@@ -1,20 +1,19 @@
 import React, { useState, useEffect } from 'react'
 import { useLocation, useParams } from 'react-router-dom'
-import { products as FeaturedProducts } from './FeaturedProducts'
-import { products as FastSelling } from './FastSelling'
 import Accordion from './Accordion'
 import SizeGuideDrawer from './SizeGuide'
 import ProductImageViewer from './ProductImageViewer'
-import { useCart } from '../Cart/CartContext'
+import { useDispatch } from "react-redux";
+import { addToCart } from "../../redux/slices/cartSlice";
+
 
 const ProductDetails = () => {
-  const { addToCart } = useCart()
+  const dispatch = useDispatch()
   const [showDrawer, setShowDrawer] = useState(false)
   const { state } = useLocation()
   const { productName } = useParams()
 
-  const allproducts = [...FeaturedProducts, ...FastSelling]
-  const product = state?.product || allproducts.find(p => p.title === decodeURIComponent(productName))
+  const product = state?.product
 
   const [selectedColor, setSelectedColor] = useState('')
   const [selectedSize, setSelectedSize] = useState('')
@@ -97,16 +96,17 @@ const ProductDetails = () => {
 
             <button
               onClick={() => {
-                addToCart({
-                  id: product.id,
-                  title: product.title,
-                  price: product.price,
-                  image: product.images?.[0]?.url || '',
-                  size: selectedSize,
-                  color: selectedColor,
-                  quantity,
-                })
-              }}
+              dispatch(addToCart({
+              productId: product._id,   // use _id from MongoDB instead of id
+              title: product.title,
+              price: product.price,
+              image: product.images?.[0]?.url || '',
+              size: selectedSize,
+             color: selectedColor,
+             quantity,
+          }));
+      }}
+
               className="mt-6 px-6 py-3 bg-black text-white rounded hover:bg-gray-800 w-full"
             >
               Add to Cart

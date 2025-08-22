@@ -1,17 +1,15 @@
 import React, { useState } from 'react';
-import { useLocation, useNavigate, Link } from 'react-router-dom';
-import SignUpImg from '../assets/SUIMG.png';
+import { useNavigate, Link } from 'react-router-dom';
+import SignupPageVid from '../assets/signuppagevid.mp4'
+import { signUpUser } from '../redux/slices/authSlice';
+import { useDispatch } from 'react-redux';
 
 export default function SignupDetails() {
   const navigate = useNavigate();
-  const { state } = useLocation();
-  const emailFromLogin = state?.email || '';
-
-  if (!emailFromLogin) {
-    navigate('/', { replace: true });
-  }
+  const dispatch = useDispatch();
 
   const [form, setForm] = useState({
+    email: '',
     firstName: '',
     lastName: '',
     password: '',
@@ -29,7 +27,8 @@ export default function SignupDetails() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.table({ email: emailFromLogin, ...form });
+    console.table(form);
+    dispatch(signUpUser(form));
   };
 
   const days = Array.from({ length: 31 }, (_, i) => i + 1);
@@ -40,27 +39,18 @@ export default function SignupDetails() {
   ];
 
   return (
-    <div className="flex flex-col md:flex-row w-full h-screen">
-      {/* Left: Form */}
-      <div className="w-full md:w-1/2 flex items-center justify-center px-4 sm:px-6 bg-white">
-        <div className="max-w-md w-full">
-          <div className='text-black font-medium flex items-center justify-center text-3xl mb-10'>
+    <div className="flex h-screen">
+
+      <div className="w-1/2 overflow-y-auto px-10 py-8 flex justify-center items-start hide-scrollbar">
+        <div className='max-w-md w-full'>
+          <div className='text-black font-bold text-center text-3xl mb-10'>
             <Link to='/'>BAZARR</Link>
           </div>
 
           <h2 className="text-xl font-semibold mb-6">Your wardrobe glow-up begins now</h2>
 
-          <div className="flex justify-between items-center mb-4">
-            <p>{emailFromLogin}</p>
-            <button
-              className="text-sm underline"
-              onClick={() => navigate(-1)}
-            >
-              Edit
-            </button>
-          </div>
-
           <form onSubmit={handleSubmit} className="space-y-4">
+           
             <input
               name="firstName"
               placeholder="First name*"
@@ -75,6 +65,16 @@ export default function SignupDetails() {
               placeholder="Last name*"
               className="w-full border p-2 rounded"
               value={form.lastName}
+              onChange={handleChange}
+              required
+            />
+
+             <input
+              type="email"
+              name="email"
+              placeholder="Email*"
+              className="w-full border p-2 rounded"
+              value={form.email}
               onChange={handleChange}
               required
             />
@@ -129,7 +129,7 @@ export default function SignupDetails() {
 
             <label className="block text-sm font-medium mt-3">Mostly interested in*</label>
             <div className="flex gap-4">
-              {['womenswear', 'menswear'].map((val) => (
+              {['womenwear', 'menwear', 'unisex'].map((val) => (
                 <label key={val} className="flex items-center gap-2">
                   <input
                     type="radio"
@@ -168,16 +168,18 @@ export default function SignupDetails() {
             </button>
           </form>
         </div>
-      </div>
+        </div>
 
-      {/* Right: Image */}
-      <div className="hidden md:block md:w-1/2 h-screen">
-        <img
-          src={SignUpImg}
-          alt="Fashion model"
-          className="w-full h-full object-contain flex justify-end"
-        />
+      <div className='w-1/2 h-screen hidden md:block fixed right-0 top-0 bottom-0'>
+      <video
+      className='w-full h-full object-cover'
+      autoPlay
+      loop
+      muted
+      playsInline>
+        <source src={SignupPageVid} type= "video/mp4" />
+      </video>
       </div>
-    </div>
+      </div>
   );
-}
+} 

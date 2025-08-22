@@ -44,15 +44,15 @@ router.post('/', async (req, res) => {
             })
         }
         cart.totalPrice = cart.products.reduce((acc, item) => {
-            const price = typeof item.price === 'Number' ? item.price :  0
-            const quantity = typeof item.quantity === 'Number' ? item.quantity : 1
+            const price = typeof item.price === 'number' ? item.price :  0
+            const quantity = typeof item.quantity === 'number' ? item.quantity : 1
             return acc + price * quantity 
         },0)
         await cart.save()
         return res.status(200).json(cart)
      } else{
-        const safePrice = typeof product.price === 'Number' ? product.price : 0
-        const safeQuantity = typeof quantity === 'Number' ? quantity : 1
+        const safePrice = typeof product.price === 'number' ? product.price : 0
+        const safeQuantity = typeof quantity === 'number' ? quantity : 1
         const newCart = await Cart.create({
             user: userId ? userId : undefined,
             guestId: guestId ? guestId : "guest_" + new Date().getTime(),
@@ -92,13 +92,13 @@ router.put('/', async (req, res) => {
             )
             if(productIndex > -1){
                 if(quantity > 0){
-                cart.products[productIndex].quantity += Number(quantity)
+                cart.products[productIndex].quantity = Number(quantity)
             } else{
                 cart.products.splice(productIndex, 1)
             }
             cart.totalPrice = cart.products.reduce((acc, item) => {
-                 const price = typeof item.price === 'Number' ? item.price : 0
-                 const quantity = typeof item.quantity === 'Number' ? item.quantity : 1
+                 const price = typeof item.price === 'number' ? item.price : 0
+                 const quantity = typeof item.quantity === 'number' ? item.quantity : 1
             return acc + price * quantity
             }, 0)
             await cart.save()

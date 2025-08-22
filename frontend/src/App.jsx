@@ -12,11 +12,18 @@ import SignupDetails from './Pages/SignUp';
 import Collection from './Pages/collection';
 import CartPage from './Pages/Cart';
 import CheckoutPage from './Pages/Checkout';
-
+import AdminLayout from './Components/Admin/AdminLayout'
+import AdminHomePage from './Pages/AdminHomePage'
+import UserManagement from './Components/Admin/UserManagement'
+import ProductManagement from './Components/Admin/ProductManagement'
+import EditProductPage from './Components/Admin/EditProductPage';
+import {Provider} from 'react-redux'
+import store from './redux/store'
 
 export const App = () => {
   return (
     <>
+    <Provider store={store}>
     <BrowserRouter>
     <Routes>
       <Route path="/" element={<UserLayout />}>
@@ -29,11 +36,19 @@ export const App = () => {
       <Route path='/collection' element={<Collection />} />
       <Route path='/cart' element={<CartPage />} />
       <Route path='/checkout' element={<CheckoutPage />} />
+
       </Route>
       <Route path='/login' element={<Login />} />
-      <Route path='/signup-details' element={<SignupDetails />} />
+      <Route path='/signup-details' element={<SignupDetails />} /> 
+      <Route path='/admin' element={<AdminLayout />}>
+      <Route index element={<AdminHomePage />} />
+      <Route path='users' element={<UserManagement />} />
+      <Route path='products' element={<ProductManagement />} />
+      <Route path='products/:id/edit' element={<EditProductPage/>} />
+      </Route>
     </Routes>
     </BrowserRouter>
+    </Provider>
     </>
   )
 }

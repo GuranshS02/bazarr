@@ -18,8 +18,10 @@ const seedData = async () => {
         const createdUser = await User.create({
             firstName: 'Admin',
             lastName: 'User',
-            dob: new Date('1990-01-01'),
-            interestedIn: 'Unisex',
+            dobYear: 1990,
+            dobMonth: 1,
+            dobDay: 1,
+            interest: 'unisex',
             email: 'admin@example.com',
             password: '123456',
             role: 'admin'

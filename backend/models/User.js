@@ -25,16 +25,24 @@ const userSchema = new mongoose.Schema(
         required: true,
         minLength: 6
     },
-    dob: {
-        type:Date,
+    dobDay: {
+        type: Number,
         required: true
     },
-    interestedIn: {
+     dobMonth: {
         type: String,
-        enum: ['womenwear', 'menwear', 'Unisex'],
         required: true
     },
-    marketingOptIn: {
+     dobYear: {
+        type: Number,
+        required: true
+    },
+    interest: {
+        type: String,
+        enum: ['womenwear', 'menwear', 'unisex'],
+        required: true
+    },
+    newsletter: {
         type: Boolean,
         default: false
     },

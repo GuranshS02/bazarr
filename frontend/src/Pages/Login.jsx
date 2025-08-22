@@ -1,13 +1,19 @@
 import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { loginUser } from '../redux/slices/authSlice'
+import { useDispatch } from 'react-redux'
 
 const Login = () => {
 const navigate=useNavigate()
+const dispatch = useDispatch()
+
 const handleSubmit=(e)=> {
     e.preventDefault()
     const email=e.target.elements.email.value
-    if (!email) return
-    navigate('/signup-details', {state: {email}})
+    const password=e.target.elements.password.value
+    if (!email || !password) return
+    
+    dispatch(loginUser({email, password}))
 }
   return (
     <div className='min-h-screen flex items-center justify-center bg-white px-4 sm:px-6'>
@@ -56,12 +62,27 @@ const handleSubmit=(e)=> {
                 id='email'
                 required
                 className='w-full px-4 py-2 border border-gray-300 mb-4 focus:outline-none focus:ring-2 focus:ring-black rounded'/>
+
+                <label htmlFor='password' className='block text-sm font-medium mb-1'>Password:*</label>
+                <input
+                type='password'
+                id='password'
+                required
+                className='w-full px-4 py-2 border border-gray-300 mb-4 focus:outline-none focus:ring-2 focus:ring-black rounded'/>
+
                 <button
                 type='submit'
                 className='w-full bg-black text-white py-2 font-bold rounded hover:opacity-90 transition'>
                     CONTINUE
                 </button>
             </form>
+
+            <p className='text-sm mt-4'>
+              New User?{' '}
+              <Link to='/signup-details' className='text-black hover:underline'>
+              Sign up here
+              </Link>
+            </p>
 
             <div className='flex items-center my-6'>
                 <hr className='flex-grow border-gray-300' />

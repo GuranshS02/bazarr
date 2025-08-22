@@ -1,49 +1,57 @@
-import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from "react-redux";
+import { fetchProductByFilters, setFilters } from "../redux/slices/productsSlice"
 
 const Collection = () => {
-  const location = useLocation();
-  const productsFromState = location.state?.products || [];
+  const dispatch = useDispatch();
+  const { products, loading } = useSelector((state) => state.products);
 
-  const [filters, setFilters] = useState({
+  const [filters, setFiltersState] = useState({
     brand: '',
     category: '',
     size: '',
     color: '',
     sort: '',
+    gender: '',
   });
+
+  useEffect(() => {
+    dispatch(fetchProductByFilters(filters));
+  }, [filters, dispatch]);
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
-    setFilters((prev) => ({ ...prev, [name]: value }));
+    setFiltersState((prev) => ({ ...prev, [name]: value }));
+    dispatch(setFilters({ [name]: value })); 
   };
 
-  const filteredProducts = productsFromState
+  const filteredProducts = products
     .filter((product) => {
       return (
         (!filters.brand || product.brand === filters.brand) &&
         (!filters.category || product.category === filters.category) &&
-        (!filters.size || product.size === filters.size) &&
-        (!filters.color || product.color === filters.color)
+        (!filters.size || product.sizes?.includes(filters.size)) &&
+        (!filters.color || product.colors?.includes(filters.color)) &&
+        (!filters.gender || product.genders?.includes(filters.gender))
       );
     })
     .sort((a, b) => {
-      if (filters.sort === 'Price: Low to High') return a.price - b.price;
-      if (filters.sort === 'Price: High to Low') return b.price - a.price;
+      if (filters.sort === 'priceAsc') return a.price - b.price;
+      if (filters.sort === 'priceDesc') return b.price - a.price;
       return 0;
     });
 
   const getUniqueValues = (key) => {
-    return [...new Set(productsFromState.map((p) => p[key]).filter(Boolean))];
+    return [...new Set(products.map((p) => p[key]).filter(Boolean))];
   };
 
   return (
     <div className="p-6 space-y-10">
       <h1 className="text-3xl font-bold text-center">New in: Men</h1>
 
-      {/* Stylish Filter Bar */}
       <div className="bg-gray-100 p-4 rounded-2xl shadow-md">
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
+          
           <select
             name="sort"
             value={filters.sort}
@@ -51,54 +59,46 @@ const Collection = () => {
             className="bg-white px-4 py-2 rounded-xl text-sm shadow focus:outline-none"
           >
             <option value="">Sort</option>
-            <option value="Price: Low to High">Price: Low to High</option>
-            <option value="Price: High to Low">Price: High to Low</option>
+            <option value="priceAsc">Price: Low to High</option>
+            <option value="priceDesc">Price: High to Low</option>
           </select>
 
-          <select
-            name="brand"
-            value={filters.brand}
-            onChange={handleFilterChange}
-            className="bg-white px-4 py-2 rounded-xl text-sm shadow focus:outline-none"
-          >
+          <select name="brand" value={filters.brand} onChange={handleFilterChange}
+            className="bg-white px-4 py-2 rounded-xl text-sm shadow focus:outline-none">
             <option value="">Brand</option>
             {getUniqueValues('brand').map((option) => (
               <option key={option} value={option}>{option}</option>
             ))}
           </select>
 
-          <select
-            name="category"
-            value={filters.category}
-            onChange={handleFilterChange}
-            className="bg-white px-4 py-2 rounded-xl text-sm shadow focus:outline-none"
-          >
+          <select name="category" value={filters.category} onChange={handleFilterChange}
+            className="bg-white px-4 py-2 rounded-xl text-sm shadow focus:outline-none">
             <option value="">Category</option>
             {getUniqueValues('category').map((option) => (
               <option key={option} value={option}>{option}</option>
             ))}
           </select>
 
-          <select
-            name="size"
-            value={filters.size}
-            onChange={handleFilterChange}
-            className="bg-white px-4 py-2 rounded-xl text-sm shadow focus:outline-none"
-          >
+          <select name="size" value={filters.size} onChange={handleFilterChange}
+            className="bg-white px-4 py-2 rounded-xl text-sm shadow focus:outline-none">
             <option value="">Size</option>
             {getUniqueValues('size').map((option) => (
               <option key={option} value={option}>{option}</option>
             ))}
           </select>
 
-          <select
-            name="color"
-            value={filters.color}
-            onChange={handleFilterChange}
-            className="bg-white px-4 py-2 rounded-xl text-sm shadow focus:outline-none"
-          >
+          <select name="color" value={filters.color} onChange={handleFilterChange}
+            className="bg-white px-4 py-2 rounded-xl text-sm shadow focus:outline-none">
             <option value="">Color</option>
             {getUniqueValues('color').map((option) => (
+              <option key={option} value={option}>{option}</option>
+            ))}
+          </select>
+
+          <select name="gender" value={filters.gender} onChange={handleFilterChange}
+            className="bg-white px-4 py-2 rounded-xl text-sm shadow focus:outline-none">
+            <option value="">Gender</option>
+            {getUniqueValues('gender').map((option) => (
               <option key={option} value={option}>{option}</option>
             ))}
           </select>
@@ -106,11 +106,13 @@ const Collection = () => {
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-        {filteredProducts.length > 0 ? (
+        {loading ? (
+          <p className="col-span-full text-center text-gray-500">Loading...</p>
+        ) : filteredProducts.length > 0 ? (
           filteredProducts.map((product) => (
-            <div key={product.id} className="border p-3 rounded-md shadow hover:shadow-lg transition">
+            <div key={product._id} className="border p-3 rounded-md shadow hover:shadow-lg transition">
               <img
-                src={product.image}
+                src={product.image || product.images?.[0]?.url}
                 alt={product.title}
                 className="w-full h-[500px] object-cover rounded"
               />

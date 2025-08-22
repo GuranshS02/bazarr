@@ -14,6 +14,7 @@ export default function CheckoutPage() {
     postcode: '',
     country: 'India',
     paymentMethod: 'cod',
+    upiId: '',
   });
 
   const handleChange = (e) => {
@@ -23,6 +24,12 @@ export default function CheckoutPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (form.paymentMethod === 'upi' && !form.upiId) {
+      alert('Please enter your UPI ID to continue.');
+      return;
+    }
+
     alert(`Order placed successfully with ${form.paymentMethod.toUpperCase()}!`);
   };
 
@@ -143,8 +150,9 @@ export default function CheckoutPage() {
 
           <div className="mt-6">
             <h2 className="text-lg font-semibold mb-2">Select Payment Method</h2>
-            <div className="space-y-2">
-              <label className="flex items-center space-x-2">
+            <div className="space-y-4">
+              
+              <label className="flex items-center space-x-2 p-3 border rounded-md cursor-pointer hover:bg-gray-50">
                 <input
                   type="radio"
                   name="paymentMethod"
@@ -155,23 +163,51 @@ export default function CheckoutPage() {
                 />
                 <span>Cash on Delivery</span>
               </label>
-              <label className="flex items-center space-x-2">
-                <input
-                  type="radio"
-                  name="paymentMethod"
-                  value="upi"
-                  checked={form.paymentMethod === 'upi'}
-                  onChange={handleChange}
-                  className="accent-black"
-                />
-                <span>UPI</span>
-              </label>
+
+              <div
+                className={`p-4 border rounded-md cursor-pointer hover:bg-gray-50 ${
+                  form.paymentMethod === 'upi' ? 'border-black' : 'border-gray-300'
+                }`}
+              >
+                <label className="flex items-center space-x-3">
+                  <input
+                    type="radio"
+                    name="paymentMethod"
+                    value="upi"
+                    checked={form.paymentMethod === 'upi'}
+                    onChange={handleChange}
+                    className="accent-black"
+                  />
+                  <span className="font-medium">UPI</span>
+                  
+                  <div className="flex space-x-2 ml-4">
+                    <img src="/gpay.png" alt="GPay" className="w-8 h-8" />
+                    <img src="/phonepe.jpg" alt="PhonePe" className="w-8 h-8" />
+                    <img src="/paytm.png" alt="Paytm" className="w-8 h-8" />
+                    <img src="/bhim.png" alt="BHIM" className="w-8 h-8" />
+                  </div>
+                </label>
+
+                {form.paymentMethod === 'upi' && (
+                  <div className="mt-4">
+                    <label className="block text-sm font-medium mb-1">Enter UPI ID</label>
+                    <input
+                      type="text"
+                      name="upiId"
+                      value={form.upiId}
+                      onChange={handleChange}
+                      placeholder="example@upi"
+                      className="w-full border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-black"
+                    />
+                  </div>
+                )}
+              </div>
             </div>
           </div>
 
           <button
             type="submit"
-            className="w-full bg-black text-white py-3 font-semibold rounded-md hover:bg-gray-900 transition"
+            className="w-full bg-black text-white py-3 font-semibold rounded-md hover:bg-gray-900 transition mt-4"
           >
             Proceed to Payment
           </button>
@@ -220,4 +256,3 @@ export default function CheckoutPage() {
     </div>
   );
 }
-
