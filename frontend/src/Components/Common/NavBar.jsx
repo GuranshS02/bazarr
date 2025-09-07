@@ -54,6 +54,7 @@ const NavBar = () => {
           {cartCount > 0 && (
             <span className="absolute -top-1 -right-2.5 bg-gray-950 text-white text-xs rounded-full px-2 py-0.5">
               {cartCount}
+               <span className='absolute left-0 -bottom-1 w-0 h-0.5 bg-gray-950 transition-all duration-300 group-hover:w-full'></span>
             </span>
           )}
         </Link>

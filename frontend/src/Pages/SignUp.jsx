@@ -25,10 +25,16 @@ export default function SignupDetails() {
     setForm((prev) => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.table(form);
-    dispatch(signUpUser(form));
+    try{
+      const result = await dispatch(signUpUser(form)).unwrap()
+      if(result){
+        navigate('/')
+      }
+    } catch(err){
+      console.error('signup failed:', err)
+    }
   };
 
   const days = Array.from({ length: 31 }, (_, i) => i + 1);

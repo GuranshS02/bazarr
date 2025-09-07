@@ -116,7 +116,9 @@ router.get('/', async (req, res) => {
         if(search) {
             query.$or = [
                 {title: {$regex: search, $options: "i"}},
-                {description: {$regex: search, $options: "i"}}
+                {description: {$regex: search, $options: "i"}},
+                { brand: { $regex: search, $options: "i" } },
+                { category: { $regex: search, $options: "i" } }
             ]
         }
 

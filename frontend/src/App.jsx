@@ -17,10 +17,21 @@ import AdminHomePage from './Pages/AdminHomePage'
 import UserManagement from './Components/Admin/UserManagement'
 import ProductManagement from './Components/Admin/ProductManagement'
 import EditProductPage from './Components/Admin/EditProductPage';
-import {Provider} from 'react-redux'
+import {Provider, useDispatch, useSelector} from 'react-redux'
 import store from './redux/store'
+import OrdersPage from './Pages/Orders';
+import OrderConfirmation from './Pages/OrderConfirmation';
+import MyAccount from './Pages/MyAccount';
+import ContactUs from './Pages/ContactUs';
+import FAQ from './Pages/FAQ';
+import TAC from './Pages/TAC';
+import TrackOrder from './Pages/TrackOrder';
+import Shipping from './Pages/Shipping';
+import Cancellation from './Pages/Cancellation';
+import Returns from './Pages/Returns';
 
 export const App = () => {
+
   return (
     <>
     <Provider store={store}>
@@ -36,6 +47,16 @@ export const App = () => {
       <Route path='/collection' element={<Collection />} />
       <Route path='/cart' element={<CartPage />} />
       <Route path='/checkout' element={<CheckoutPage />} />
+      <Route path='/orders' element={<OrdersPage />} />
+      <Route path='/order-confirmation' element={<OrderConfirmation />} />
+      <Route path='/my-account' element={<MyAccount />} />
+      <Route path='/contact-us' element={<ContactUs />} />
+      <Route path='/faq' element={<FAQ />} />
+      <Route path='/t&c' element={<TAC />} />
+      <Route path='/track-orders' element={<TrackOrder />} />
+      <Route path='/shipping' element={<Shipping />} />
+      <Route path='/cancellations' element={<Cancellation />} />
+      <Route path='/returns' element={<Returns />} />
 
       </Route>
       <Route path='/login' element={<Login />} />

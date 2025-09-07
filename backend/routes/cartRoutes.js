@@ -9,7 +9,7 @@ const getCart = async(userId, guestId) => {
     if(userId){
         return await Cart.findOne({user: userId})
     } else if(guestId){
-        return await Cart.findOne({guestId})
+        return await Cart.findOne({guestId: guestId})
     }
     return null
 }

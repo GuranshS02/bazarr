@@ -1,13 +1,21 @@
 import React from 'react'
 import { useState } from 'react'
 import {FiSearch} from 'react-icons/fi'
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { fetchProductByFilters, setFilters } from '../../redux/slices/productsSlice';
 
 const SearchBar = ({onSearch}) => {
-    const[searchTerm, setSearchTerm]= useState("");
+    const[searchTerm, setSearchTerm]= useState("")
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
 
     const handleSubmit= (e)=>{
         e.preventDefault()
-        console.log("Search Term:", searchTerm)
+        dispatch(setFilters({search: searchTerm}))
+        dispatch(fetchProductByFilters({search: searchTerm}))
+        navigate(`/collection?search=${encodeURIComponent(searchTerm)}`);
+
     }
   return (
     <div className='max-w-xl w-full'>

@@ -22,7 +22,7 @@ export const fetchUserOrders = createAsyncThunk(
 
 export const fetchOrderDetails = createAsyncThunk(
     'orders/fetchOrderDetails',
-    async (orderId, {rejectWithValues}) => {
+    async (orderId, {rejectWithValue}) => {
         try {
             const response = await axios.get(
                 `${import.meta.env.VITE_BACKEND_URL}/api/orders/${orderId}`,
@@ -34,7 +34,7 @@ export const fetchOrderDetails = createAsyncThunk(
             )
             return response.data
         } catch (error) {
-            return rejectWithValues(error.response.data)
+            return rejectWithValue(error.response.data)
         }
     }
 )

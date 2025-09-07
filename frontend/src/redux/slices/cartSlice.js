@@ -12,26 +12,36 @@ const saveCartToStorage = (cart) => {
 
 export const fetchCart = createAsyncThunk(
     'cart/fetch',
-    async({userId, guestId}, {rejectWithValue}) => {
+    async({userId, guestId}, thunkAPI) => {
         try {
+            const state = thunkAPI.getState()
+            let guestId = state.guest.guestId || localStorage.getItem("guestId")
+
             const response = await axios.get(
                 `${import.meta.env.VITE_BACKEND_URL}/api/cart`,
                 {
                     params: {userId, guestId},
                 }
             )
+
+             if(response.data.guestId) {
+                localStorage.setItem("guestId", response.data.guestId)
+            }
+
             return response.data
         } catch (error) {
-            console.error(error)
-            return rejectWithValue(error.response.data)
+            return thunkAPI.rejectWithValue(error.response?.data)
         }
     }
 )
 
 export const addToCart = createAsyncThunk(
     'cart/addToCart',
-    async({productId, quantity, size, color, guestId, userId}, {rejectWithValue}) => {
+    async({productId, quantity, size, color, guestId, userId}, thunkAPI) => {
         try {
+            const state = thunkAPI.getState()
+            let guestId = state.guest.guestId || localStorage.getItem("guestId")
+
             const response = await axios.post(
                 `${import.meta.env.VITE_BACKEND_URL}/api/cart`,
                 {
@@ -43,18 +53,25 @@ export const addToCart = createAsyncThunk(
                     userId
                 }
             )
+
+            if(response.data.guestId) {
+                localStorage.setItem("guestId", response.data.guestId)
+            }
+
             return response.data
         } catch (error) {
-            console.error(error)
-            return rejectWithValue(error.response.data)
+            return thunkAPI.rejectWithValue(error.response?.data)
         }
     }
 )
 
 export const updateCartItemQuantity = createAsyncThunk(
     'cart/updateCartItemQuantity',
-    async({productId, quantity, guestId, userId, size, color,}, {rejectWithValue}) => {
+    async({productId, quantity, guestId, userId, size, color,}, thunkAPI) => {
         try {
+            const state = thunkAPI.getState()
+            let guestId = state.guest.guestId || localStorage.getItem("guestId")
+
             const response = await axios.put(
                 `${import.meta.env.VITE_BACKEND_URL}/api/cart`,
                 {
@@ -66,26 +83,39 @@ export const updateCartItemQuantity = createAsyncThunk(
                     size
                 }
             )
+
+            if(response.data.guestId) {
+                localStorage.setItem("guestId", response.data.guestId)
+            }
+
             return response.data
         } catch (error) {
-            console.error(error)
-            return rejectWithValue(error.response.data)
+            return thunkAPI.rejectWithValue(error.response?.data)
         }
     }
 )
 
 export const removeFromCart = createAsyncThunk(
     'cart/removeFromCart',
-    async({productId, guestId, userId, size, color}, {rejectWithValue}) => {
+    async({productId, guestId, userId, size, color}, thunkAPI) => {
         try {
+            const state = thunkAPI.getState()
+            let guestId = state.guest.guestId || localStorage.getItem("guestId")
+
             const response = await axios({
                 method: 'DELETE',
                 url: `${import.meta.env.VITE_BACKEND_URL}/api/cart`,
                 data: {productId, userId, size, color, guestId},
-            })
+            }
+        )
+
+        if(response.data.guestId) {
+                localStorage.setItem("guestId", response.data.guestId)
+            }
+
             return response.data
         } catch (error) {
-            return rejectWithValue(error.response.data)
+            return thunkAPI.rejectWithValue(error.response?.data)
         }
     }
 )

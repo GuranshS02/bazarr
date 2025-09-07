@@ -4,25 +4,24 @@ const Cart = require('../models/cart')
 const Product = require('../models/Products')
 const Order = require('../models/order')
 const {protect} = require('../middleware/authMiddleware')
-const { checkout } = require('./productRoutes')
 
 const router = express.Router()
 
 router.post('/', protect, async (req, res) => {
-    const {CheckoutItems, shippingAddress, paymentMethod, totalPrice} = req.body
+    const {checkoutItems, shippingAddress, paymentMethod, totalPrice} = req.body
 
-    if(!CheckoutItems || CheckoutItems.length === 0){
+    if(!checkoutItems || checkoutItems.length === 0){
         return res.status(400).json({message: "no items in checkout"})
     }
 
     try{
-        const newCheckout = await checkout.create({
+        const newCheckout = await Checkout.create({
             user: req.user._id,
-            CheckoutItems: CheckoutItems,
+            checkoutItems,
             shippingAddress,
             paymentMethod,
             totalPrice,
-            paymentStatus: "Pending",
+            paymentStatus: "pending",
             isPaid: false
         })
         console.log(`Checkout created for user: ${req.user._id}`)

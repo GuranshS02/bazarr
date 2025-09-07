@@ -5,42 +5,25 @@ import { IoLogoInstagram } from 'react-icons/io';
 import { FaWhatsapp } from 'react-icons/fa';
 import { FiPhoneCall } from 'react-icons/fi';
 import { TbCertificate } from 'react-icons/tb';    
-import { FiRefreshCw } from 'react-icons/fi'; 
-import FooterImg from '../../assets/footer.png'     
+import { FiRefreshCw } from 'react-icons/fi';    
 
 
 
 const Footer = () => {
   return (
-    <footer className='border-t py-12'>
-        <div className='relative h-[300px] md:h-[290px] lg:h-[250px] opacity-100 w-full bg-cover bg-center flex items-center text-white text-2xl md:text-4xl font-semibold italic px-4 mb-10'
-        style={{backgroundImage: `url(${FooterImg})`}}>
-            <div className='bg-opacity-50 p-6 rounded max-w-2xl mx-auto text-center'>
-                "Where essentials become iconic."
-            </div>
-        </div>
-        <div className='container mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 px-4 lg:px-0'>
+    <footer className='border-t py-12 mt-12'>
+        <div className='container mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 px-4 lg:px-0 mt-12'>
             <div className='ml-4 md:ml-8'>
                 <h3 className='text-lg text-gray-950 mb-4 font-medium'>ONLINE SHOPPING</h3>
                 <ul className='space-y-2 text-gray-600'>
                     <li>
-                        <Link to='#' className='hover:text-gray-500 transition-colors'>
+                        <Link to='/men' className='hover:text-gray-500 transition-colors'>
                         Men
                         </Link>
                     </li>
                     <li>
-                        <Link to='#' className='hover:text-gray-500 transition-colors'>
+                        <Link to='/women' className='hover:text-gray-500 transition-colors'>
                         Women
-                        </Link>
-                    </li>
-                    <li>
-                        <Link to='#' className='hover:text-gray-500 transition-colors'>
-                        Kids
-                        </Link>
-                    </li>
-                    <li>
-                        <Link to='#' className='hover:text-gray-500 transition-colors'>
-                        Electronics
                         </Link>
                     </li>
                 </ul>
@@ -50,37 +33,37 @@ const Footer = () => {
                 <h3 className='text-lg text-gray-950 mb-4 font-medium'>SUPPORT</h3>
                     <ul className='space-y-2 text-gray-600'>
                     <li>
-                        <Link to='#' className='hover:text-gray-500 transition-colors'>
+                        <Link to='/contact-us' className='hover:text-gray-500 transition-colors'>
                         Contact Us
                         </Link>
                     </li>
                     <li>
-                        <Link to='#' className='hover:text-gray-500 transition-colors'>
+                        <Link to='/faq' className='hover:text-gray-500 transition-colors'>
                         FAQ
                         </Link>
                     </li>
                     <li>
-                        <Link to='#' className='hover:text-gray-500 transition-colors'>
+                        <Link to='/t&c' className='hover:text-gray-500 transition-colors'>
                         T&C
                         </Link>
                     </li>
                     <li>
-                        <Link to='#' className='hover:text-gray-500 transition-colors'>
+                        <Link to='/track-orders' className='hover:text-gray-500 transition-colors'>
                         Track Orders
                         </Link>
                     </li>
                     <li>
-                        <Link to='#' className='hover:text-gray-500 transition-colors'>
+                        <Link to='/shipping' className='hover:text-gray-500 transition-colors'>
                         Shipping
                         </Link>
                     </li>
                     <li>
-                        <Link to='#' className='hover:text-gray-500 transition-colors'>
+                        <Link to='/cancellations' className='hover:text-gray-500 transition-colors'>
                         Cancellation
                         </Link>
                     </li>
                     <li>
-                        <Link to='#' className='hover:text-gray-500 transition-colors'>
+                        <Link to='/returns' className='hover:text-gray-500 transition-colors'>
                         Returns
                         </Link>
                     </li>

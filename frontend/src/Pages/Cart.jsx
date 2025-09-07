@@ -94,7 +94,7 @@ export default function CartPage() {
 
             <div className="text-right">
               <h3 className="text-xl font-semibold">
-                Total: <span className="text-black">${total}</span>
+                Total: <span className="text-black">₹{total}</span>
               </h3>
               <Link to='/checkout'>
                 <button className="mt-4 bg-black text-white px-6 py-3 rounded-md hover:bg-gray-900 transition">

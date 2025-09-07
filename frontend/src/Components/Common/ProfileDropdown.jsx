@@ -1,9 +1,20 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { HiOutlineUser } from 'react-icons/hi';
+import { useDispatch, useSelector } from 'react-redux';
+import { logoutUser } from '../../redux/slices/authSlice'
 
 const ProfileDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+
+  const { user } = useSelector((state) => state.auth)
+
+  const handleLogout = () => {
+    dispatch(logoutUser())
+    navigate('/')
+  }
 
   return (
     <div
@@ -21,6 +32,9 @@ const ProfileDropdown = () => {
           isOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
         }`}
       >
+
+        {!user ? (
+          <>
         <h3 className="text-sm font-medium text-gray-600 mb-2">Welcome</h3>
         <p className="text-sm text-gray-500 mb-4">
           To access account and manage orders
@@ -31,13 +45,40 @@ const ProfileDropdown = () => {
         >
           LOGIN / SIGNUP
         </Link>
+        </>
+        ) : (
+          <>
+          <h3 className='text-sm font-bold text-black mb-2'>
+            Hello, {user.name || 'User'}
+          </h3>
 
-        <ul className="space-y-2 text-sm text-gray-700">
-          <li className="hover:text-black cursor-pointer">Orders</li>
-          <li className="hover:text-black cursor-pointer">Wishlist</li>
-          <li className="hover:text-black cursor-pointer">Gift Cards</li>
-          <li className="hover:text-black cursor-pointer">Contact Us</li>
-        </ul>
+            <ul className="space-y-2 text-sm text-gray-700">
+              <li>
+                <Link to="/my-account" className="hover:text-black">
+                  My Account
+                </Link>
+              </li>
+              <li>
+                <Link to="/orders" className="hover:text-black">
+                  Orders
+                </Link>
+              </li>
+              <li>
+                <Link to="/wishlist" className="hover:text-black">
+                  Wishlist
+                </Link>
+              </li>
+              <li>
+                <button
+                  onClick={handleLogout}
+                  className="block w-full text-center bg-black text-white font-semibold py-2 text-sm mb-3 hover:bg-black transition rounded"
+                >
+                  Logout
+                </button>
+              </li>
+            </ul>
+            </>
+        )}
       </div>
     </div>
   );

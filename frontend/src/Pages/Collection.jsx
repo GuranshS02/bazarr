@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProductByFilters, setFilters } from "../redux/slices/productsSlice"
+import { fetchProductByFilters } from "../redux/slices/productsSlice";
+import { useSearchParams } from 'react-router-dom';
 
 const Collection = () => {
   const dispatch = useDispatch();
   const { products, loading } = useSelector((state) => state.products);
+
+  const [params] = useSearchParams();
+  const searchTerm = params.get('search');
 
   const [filters, setFiltersState] = useState({
     brand: '',
@@ -15,32 +19,29 @@ const Collection = () => {
     gender: '',
   });
 
+  // 🔥 Fetch products whenever search or filters change
   useEffect(() => {
-    dispatch(fetchProductByFilters(filters));
-  }, [filters, dispatch]);
+    const allFilters = { ...filters };
+    if (searchTerm) {
+      allFilters.search = searchTerm;
+    }
+    dispatch(fetchProductByFilters(allFilters));
+  }, [searchTerm, filters, dispatch]);
 
+  // ✅ Update filters when user selects dropdown
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
     setFiltersState((prev) => ({ ...prev, [name]: value }));
-    dispatch(setFilters({ [name]: value })); 
   };
 
-  const filteredProducts = products
-    .filter((product) => {
-      return (
-        (!filters.brand || product.brand === filters.brand) &&
-        (!filters.category || product.category === filters.category) &&
-        (!filters.size || product.sizes?.includes(filters.size)) &&
-        (!filters.color || product.colors?.includes(filters.color)) &&
-        (!filters.gender || product.genders?.includes(filters.gender))
-      );
-    })
-    .sort((a, b) => {
-      if (filters.sort === 'priceAsc') return a.price - b.price;
-      if (filters.sort === 'priceDesc') return b.price - a.price;
-      return 0;
-    });
+  // ✅ Only sort on frontend (filtering handled by backend)
+  const sortedProducts = [...products].sort((a, b) => {
+    if (filters.sort === 'priceAsc') return a.price - b.price;
+    if (filters.sort === 'priceDesc') return b.price - a.price;
+    return 0;
+  });
 
+  // ✅ Get unique values for dropdowns
   const getUniqueValues = (key) => {
     return [...new Set(products.map((p) => p[key]).filter(Boolean))];
   };
@@ -49,9 +50,11 @@ const Collection = () => {
     <div className="p-6 space-y-10">
       <h1 className="text-3xl font-bold text-center">New in: Men</h1>
 
+      {/* Filters */}
       <div className="bg-gray-100 p-4 rounded-2xl shadow-md">
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
-          
+
+          {/* Sort */}
           <select
             name="sort"
             value={filters.sort}
@@ -63,40 +66,65 @@ const Collection = () => {
             <option value="priceDesc">Price: High to Low</option>
           </select>
 
-          <select name="brand" value={filters.brand} onChange={handleFilterChange}
-            className="bg-white px-4 py-2 rounded-xl text-sm shadow focus:outline-none">
+          {/* Brand */}
+          <select
+            name="brand"
+            value={filters.brand}
+            onChange={handleFilterChange}
+            className="bg-white px-4 py-2 rounded-xl text-sm shadow focus:outline-none"
+          >
             <option value="">Brand</option>
             {getUniqueValues('brand').map((option) => (
               <option key={option} value={option}>{option}</option>
             ))}
           </select>
 
-          <select name="category" value={filters.category} onChange={handleFilterChange}
-            className="bg-white px-4 py-2 rounded-xl text-sm shadow focus:outline-none">
+          {/* Category */}
+          <select
+            name="category"
+            value={filters.category}
+            onChange={handleFilterChange}
+            className="bg-white px-4 py-2 rounded-xl text-sm shadow focus:outline-none"
+          >
             <option value="">Category</option>
             {getUniqueValues('category').map((option) => (
               <option key={option} value={option}>{option}</option>
             ))}
           </select>
 
-          <select name="size" value={filters.size} onChange={handleFilterChange}
-            className="bg-white px-4 py-2 rounded-xl text-sm shadow focus:outline-none">
+          {/* Size */}
+          <select
+            name="size"
+            value={filters.size}
+            onChange={handleFilterChange}
+            className="bg-white px-4 py-2 rounded-xl text-sm shadow focus:outline-none"
+          >
             <option value="">Size</option>
             {getUniqueValues('size').map((option) => (
               <option key={option} value={option}>{option}</option>
             ))}
           </select>
 
-          <select name="color" value={filters.color} onChange={handleFilterChange}
-            className="bg-white px-4 py-2 rounded-xl text-sm shadow focus:outline-none">
+          {/* Color */}
+          <select
+            name="color"
+            value={filters.color}
+            onChange={handleFilterChange}
+            className="bg-white px-4 py-2 rounded-xl text-sm shadow focus:outline-none"
+          >
             <option value="">Color</option>
             {getUniqueValues('color').map((option) => (
               <option key={option} value={option}>{option}</option>
             ))}
           </select>
 
-          <select name="gender" value={filters.gender} onChange={handleFilterChange}
-            className="bg-white px-4 py-2 rounded-xl text-sm shadow focus:outline-none">
+          {/* Gender */}
+          <select
+            name="gender"
+            value={filters.gender}
+            onChange={handleFilterChange}
+            className="bg-white px-4 py-2 rounded-xl text-sm shadow focus:outline-none"
+          >
             <option value="">Gender</option>
             {getUniqueValues('gender').map((option) => (
               <option key={option} value={option}>{option}</option>
@@ -105,11 +133,12 @@ const Collection = () => {
         </div>
       </div>
 
+      {/* Products */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
         {loading ? (
           <p className="col-span-full text-center text-gray-500">Loading...</p>
-        ) : filteredProducts.length > 0 ? (
-          filteredProducts.map((product) => (
+        ) : sortedProducts.length > 0 ? (
+          sortedProducts.map((product) => (
             <div key={product._id} className="border p-3 rounded-md shadow hover:shadow-lg transition">
               <img
                 src={product.image || product.images?.[0]?.url}
